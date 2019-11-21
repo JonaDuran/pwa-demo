@@ -1,26 +1,74 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 
+function useCountries() {
+  const [state, setState] = useState({
+    loading: true,
+    data: []
+  })
+
+  useEffect(() => {
+    fetch('https://restcountries.eu/rest/v2/all')
+      .then(res => res.json())
+      .then(countries => {
+        setState({
+          loading: false,
+          data: countries
+        })
+      })
+  }, [])
+
+  return state
+}
+
 function App() {
+  const { loading, data } = useCountries()
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <main>
+      <h2>PWA Demo</h2>
+
+      <div className="card">
+        {loading &&
+          'Loading...'
+        }
+
+        {(!loading && data.length === 0) &&
+          'Could not load data'
+        }
+
+        {data.length > 0 &&
+          <CountriesTable countries={data} />
+        }
+
+      </div>
+    </main>
   );
+}
+
+function CountriesTable({ countries }) {
+  return (
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Region</th>
+          <th>Name</th>
+          <th>Capital</th>
+        </tr>
+      </thead>
+      <tbody>
+        {countries.map((country, i) =>
+          <tr key={i}>
+            <td>{i}</td>
+            <td>{country.region}</td>
+            <td>{country.name}</td>
+            <td>{country.capital}</td>
+          </tr>
+        )}
+      </tbody>
+    </table>
+  )
 }
 
 export default App;
