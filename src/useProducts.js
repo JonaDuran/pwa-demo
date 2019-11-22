@@ -44,7 +44,7 @@ function useProducts() {
 
 async function loadProducts() {
   if (await db.products.count() === 0 && navigator.onLine) {
-    const url = 'https://raw.githubusercontent.com/JonaDuran/pwa-demo/master/public/c_ClaveProdServ.json'
+    const url = 'https://jonaduran.github.io/pwa-demo/c_ClaveProdServ.json'
     const res = await fetch(url, { cache: 'no-cache' })
     const products = await res.json()
     await saveProducts(products) // no await

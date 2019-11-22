@@ -44,7 +44,7 @@ function useUnits() {
 
 async function loadUnits() {
   if (await db.units.count() === 0 && navigator.onLine) {
-    const url = 'https://raw.githubusercontent.com/JonaDuran/pwa-demo/master/public/c_ClaveUnidad.json'
+    const url = 'https://jonaduran.github.io/pwa-demo/c_ClaveUnidad.json'
     const res = await fetch(url, { cache: 'no-cache' })
     const units = await res.json()
     await saveUnits(units) // no await
