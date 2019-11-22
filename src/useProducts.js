@@ -1,0 +1,61 @@
+import { useState, useEffect } from 'react';
+import db from './db'
+
+const LIMIT = 50
+
+function useProducts() {
+  const [state, setState] = useState({
+    loading: true,
+    data: []
+  })
+
+  useEffect(() => {
+    loadProducts().then(products => {
+      setState({
+        loading: false,
+        data: products
+      })
+    })
+  }, [])
+
+  const search = async (event) => {
+    const text = event.currentTarget.value || ''
+
+    const products = await db.products
+      // .filter(unit => 
+      //   unit.c_ClaveUnidad.includes(text) || 
+      //   unit.Nombre.includes(text)
+      // )
+      .where('c_ClaveProdServ')
+      .startsWithIgnoreCase(text)
+      .or('Descripción')
+      .startsWithIgnoreCase(text)
+      .limit(LIMIT)
+      .toArray()
+
+    setState({
+      loading: false,
+      data: products
+    })
+  }
+
+  return { search, ...state }
+}
+
+async function loadProducts() {
+  if (await db.products.count() === 0 && navigator.onLine) {
+    const url = 'https://raw.githubusercontent.com/JonaDuran/pwa-demo/master/public/c_ClaveProdServ.json'
+    const res = await fetch(url, { cache: 'no-cache' })
+    const products = await res.json()
+    await saveProducts(products) // no await
+  }
+
+  return await db.products.limit(LIMIT).toArray()
+}
+
+async function saveProducts(products) {
+  await db.products.clear()
+  await db.products.bulkAdd(products)
+}
+
+export default useProducts

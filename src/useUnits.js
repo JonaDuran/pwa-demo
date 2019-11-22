@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import db from './db'
 
-const LIMIT = 20
+const LIMIT = 50
 
 function useUnits() {
   const [state, setState] = useState({
@@ -22,6 +22,10 @@ function useUnits() {
     const text = event.currentTarget.value || ''
 
     const units = await db.units
+      // .filter(unit => 
+      //   unit.c_ClaveUnidad.includes(text) || 
+      //   unit.Nombre.includes(text)
+      // )
       .where('c_ClaveUnidad')
       .startsWithIgnoreCase(text)
       .or('Nombre')
@@ -39,14 +43,14 @@ function useUnits() {
 }
 
 async function loadUnits() {
-  if (navigator.onLine) {
-    const url = 'https://jonaduran.github.io/pwa-demo/c_ClaveUnidad.json'
+  if (await db.units.count() === 0 && navigator.onLine) {
+    const url = 'https://raw.githubusercontent.com/JonaDuran/pwa-demo/master/public/c_ClaveUnidad.json'
     const res = await fetch(url, { cache: 'no-cache' })
     const units = await res.json()
     await saveUnits(units) // no await
   }
 
-  return await db.units.limit(LIMIT)
+  return await db.units.limit(LIMIT).toArray()
 }
 
 async function saveUnits(units) {
