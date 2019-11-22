@@ -3,11 +3,15 @@ import useCountries from './useCountries'
 import './App.css';
 
 function App() {
-  const { loading, data } = useCountries()
-
+  const { loading, data, search } = useCountries()
+  
   return (
     <main>
       <h2>PWA Demo</h2>
+
+      <div className="card">
+        <input placeholder="Buscar..." onChange={search} />
+      </div>
 
       <div className="card">
         {loading &&
@@ -41,7 +45,7 @@ function CountriesTable({ countries }) {
       <tbody>
         {countries.map((country, i) =>
           <tr key={i}>
-            <td>{i}</td>
+            <td>{i + 1}</td>
             <td>{country.region}</td>
             <td>{country.name}</td>
             <td>{country.capital}</td>

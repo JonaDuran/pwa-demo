@@ -16,7 +16,25 @@ function useCountries() {
     })
   }, [])
 
-  return state
+  const search = async (event, val) => {
+    const text = event.currentTarget.value || ''
+
+    const result = await db.countries
+      .where('name')
+      .startsWithIgnoreCase(text)
+      .or('region')
+      .startsWithIgnoreCase(text)
+      .or('capital')
+      .startsWithIgnoreCase(text)
+      .toArray()
+
+    setState({
+      loading: false,
+      data: result
+    })
+  }
+
+  return { search, ...state }
 }
 
 async function loadCountries() {
