@@ -1,25 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import useCountries from './useCountries'
 import './App.css';
-
-function useCountries() {
-  const [state, setState] = useState({
-    loading: true,
-    data: []
-  })
-
-  useEffect(() => {
-    fetch('https://restcountries.eu/rest/v2/all')
-      .then(res => res.json())
-      .then(countries => {
-        setState({
-          loading: false,
-          data: countries
-        })
-      })
-  }, [])
-
-  return state
-}
 
 function App() {
   const { loading, data } = useCountries()
