@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import db from './db'
 
+const LIMIT = 50
+
 function useCountries() {
   const [state, setState] = useState({
     loading: true,
@@ -26,6 +28,7 @@ function useCountries() {
       .startsWithIgnoreCase(text)
       .or('capital')
       .startsWithIgnoreCase(text)
+      .limit(LIMIT)
       .toArray()
 
     setState({
@@ -38,14 +41,15 @@ function useCountries() {
 }
 
 async function loadCountries() {
-  if (navigator.onLine) {
-    const res = await fetch('https://restcountries.eu/rest/v2/all')
+  if (await db.countries.count() === 0 && navigator.onLine) {
+    const url = 'https://restcountries.eu/rest/v2/all'
+    const res = await fetch(url, { cache: 'no-cache' })
     const countries = await res.json()
-    saveCountries(countries) // no await
-    return countries
-  } else {
-    return await db.countries.toArray()
+    document.querySelector('#message').textContent = `Guardando ${countries.length} registros...`
+    await saveCountries(countries)
   }
+
+  return await db.countries.limit(LIMIT).toArray()
 }
 
 async function saveCountries(countries) {

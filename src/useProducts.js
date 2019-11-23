@@ -5,7 +5,7 @@ const LIMIT = 50
 
 function useProducts() {
   const [state, setState] = useState({
-    loading: true,
+    loading: 'Cargando...',
     data: []
   })
 
@@ -47,7 +47,8 @@ async function loadProducts() {
     const url = 'https://jonaduran.github.io/pwa-demo/c_ClaveProdServ.json'
     const res = await fetch(url, { cache: 'no-cache' })
     const products = await res.json()
-    await saveProducts(products) // no await
+    document.querySelector('#message').textContent = `Guardando ${products.length} registros...`
+    await saveProducts(products)
   }
 
   return await db.products.limit(LIMIT).toArray()

@@ -15,11 +15,15 @@ function App() {
 
       <div className="card">
         {loading &&
-          'Loading...'
+          <div id="message" className="p">
+            Cargando...
+          </div>
         }
 
         {(!loading && data.length === 0) &&
-          'Could not load data'
+          <div className="p">
+            No se pudieron cargar los datos
+          </div>
         }
 
         {data.length > 0 &&
@@ -51,6 +55,13 @@ function CountriesTable({ countries }) {
             <td>{country.capital}</td>
           </tr>
         )}
+        { countries.length >= 50 &&
+          <tr>
+            <td colSpan="4">
+              Solo se muestran 50 resultados
+            </td>
+          </tr>
+        }
       </tbody>
     </table>
   )

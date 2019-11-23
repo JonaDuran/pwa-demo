@@ -47,7 +47,8 @@ async function loadUnits() {
     const url = 'https://jonaduran.github.io/pwa-demo/c_ClaveUnidad.json'
     const res = await fetch(url, { cache: 'no-cache' })
     const units = await res.json()
-    await saveUnits(units) // no await
+    document.querySelector('#message').textContent = `Guardando ${units.length} registros...`
+    await saveUnits(units)
   }
 
   return await db.units.limit(LIMIT).toArray()

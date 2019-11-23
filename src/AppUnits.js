@@ -15,11 +15,15 @@ function App() {
 
       <div className="card">
         {loading &&
-          'Cargando...'
+          <div id="message" className="p">
+            Cargando...
+          </div>
         }
 
         {(!loading && data.length === 0) &&
-          'No se pudieron cargar los datos'
+          <div className="p">
+            No se pudieron cargar los datos
+          </div>
         }
 
         {data.length > 0 &&
@@ -49,6 +53,14 @@ function UnitsTable({ units }) {
             <td>{unit.Nombre}</td>
           </tr>
         )}
+
+        { units.length >= 50 &&
+          <tr>
+            <td colSpan="3">
+              Solo se muestran 50 resultados
+            </td>
+          </tr>
+        }
       </tbody>
     </table>
   )
