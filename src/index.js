@@ -6,6 +6,9 @@ import AppProducts from './AppProducts';
 import AppUnits from './AppUnits';
 import * as serviceWorker from './serviceWorker';
 import db from './db';
+import test from './test';
+
+// test.units()
 
 function Index() {
   const [path, setPath] = useState(window.location.hash)

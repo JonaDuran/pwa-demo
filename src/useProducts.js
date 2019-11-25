@@ -23,8 +23,8 @@ function useProducts() {
 
     const products = await db.products
       // .filter(unit => 
-      //   unit.c_ClaveUnidad.includes(text) || 
-      //   unit.Nombre.includes(text)
+      //   unit.c_ClaveProdServ.includes(text) || 
+      //   unit.Descripción.includes(text)
       // )
       .where('c_ClaveProdServ')
       .startsWithIgnoreCase(text)
