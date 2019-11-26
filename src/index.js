@@ -6,9 +6,9 @@ import AppProducts from './AppProducts';
 import AppUnits from './AppUnits';
 import * as serviceWorker from './serviceWorker';
 import db from './db';
-import test from './test';
 
-// test.units()
+// import test from './test';
+// test.products()
 
 function Index() {
   const [path, setPath] = useState(window.location.hash)
@@ -32,9 +32,9 @@ function Index() {
         </h3>
       }
       <div id="menu">
-        <a {...linkProps('countries')}>Países</a>
-        <a {...linkProps('units')}>Unidades</a>
-        <a {...linkProps('products')}>Productos</a>
+        {/* <a {...linkProps('countries')}>Países</a> */}
+        <a {...linkProps('units')}>Unidades v2</a>
+        <a {...linkProps('products')}>Productos v2</a>
         <a {...linkProps('clear')}>Borrar caché</a>
       </div>
       {path === '#countries' && <App />}
