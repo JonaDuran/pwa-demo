@@ -28,7 +28,7 @@ function Index() {
     <main>
       {!path &&
         <h3>
-          Seleccione una opción
+          (v1.12) Seleccione una opción
         </h3>
       }
       <div id="menu">

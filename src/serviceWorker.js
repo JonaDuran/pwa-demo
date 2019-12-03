@@ -10,6 +10,11 @@
 // To learn more about the benefits of this model and instructions on how to
 // opt-in, read https://bit.ly/CRA-PWA
 
+const log = (text) => {
+  const log = document.querySelector('#logs')
+  log.textContent += '\n' + text
+}
+
 const isLocalhost = Boolean(
   window.location.hostname === 'localhost' ||
     // [::1] is the IPv6 localhost address.
@@ -21,7 +26,8 @@ const isLocalhost = Boolean(
 );
 
 export function register(config) {
-  if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
+  log('register')
+  if (true/* process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator */) {
     // The URL constructor is available in all browsers that support SW.
     const publicUrl = new URL(process.env.PUBLIC_URL, window.location.href);
     if (publicUrl.origin !== window.location.origin) {
@@ -32,6 +38,7 @@ export function register(config) {
     }
 
     window.addEventListener('load', () => {
+      log('load')
       const swUrl = `${process.env.PUBLIC_URL}/service-worker.js`;
 
       if (isLocalhost) {
@@ -51,21 +58,30 @@ export function register(config) {
         registerValidSW(swUrl, config);
       }
     });
+  } else {
+    log('is not production')
   }
 }
 
 function registerValidSW(swUrl, config) {
+  log('registerValidSW')
   navigator.serviceWorker
     .register(swUrl)
     .then(registration => {
+      log('-success')
       registration.onupdatefound = () => {
+        log('-onupdatefound')
+        
         const installingWorker = registration.installing;
         if (installingWorker == null) {
           return;
         }
         installingWorker.onstatechange = () => {
+          log('--onstatechange')
           if (installingWorker.state === 'installed') {
+            log('---installed')
             if (navigator.serviceWorker.controller) {
+              log('---controller exist')
               // At this point, the updated precached content has been fetched,
               // but the previous service worker will still serve the older
               // content until all client tabs are closed.
@@ -74,11 +90,17 @@ function registerValidSW(swUrl, config) {
                   'tabs for this page are closed. See https://bit.ly/CRA-PWA.'
               );
 
+              log('--unregister')
+              registration.unregister().then(() => {
+                window.location.reload();
+              });
+              
               // Execute callback
               if (config && config.onUpdate) {
                 config.onUpdate(registration);
               }
             } else {
+              log('---controller false')
               // At this point, everything has been precached.
               // It's the perfect time to display a
               // "Content is cached for offline use." message.
@@ -94,22 +116,27 @@ function registerValidSW(swUrl, config) {
       };
     })
     .catch(error => {
+      log('-failed')
       console.error('Error during service worker registration:', error);
     });
 }
 
 function checkValidServiceWorker(swUrl, config) {
+  log('checkValidServiceWorker')
   // Check if the service worker can be found. If it can't reload the page.
   fetch(swUrl)
     .then(response => {
+      log('-success')
       // Ensure service worker exists, and that we really are getting a JS file.
       const contentType = response.headers.get('content-type');
       if (
         response.status === 404 ||
         (contentType != null && contentType.indexOf('javascript') === -1)
       ) {
+        log('-No service worker found')
         // No service worker found. Probably a different app. Reload the page.
         navigator.serviceWorker.ready.then(registration => {
+          log('--unregister')
           registration.unregister().then(() => {
             window.location.reload();
           });
@@ -127,8 +154,10 @@ function checkValidServiceWorker(swUrl, config) {
 }
 
 export function unregister() {
+  log('unregister')
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.ready.then(registration => {
+      log('-unregister')
       registration.unregister();
     });
   }
